@@ -15,6 +15,9 @@ Replace <ACCOUNT_ID>, <REPO>, and <ROLE_NAME> with your values.
       "Condition": {
         "StringEquals": {
           "token.actions.githubusercontent.com:sub": "repo:akshaykam/AWS_Amplify_Angular_Bookmyseat_Service:ref:refs/heads/main"
+        },
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
         }
       }
     }

@@ -15,17 +15,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::543816070942:role/<ROLE_NAME>
-          aws-region: <REGION>
+          role-to-assume: arn:aws:iam::543816070942:role/AWSAmplify_Angular_Role_AK
+          aws-region: us-east-1
+
       - name: Install Amplify CLI
         run: npm install -g @aws-amplify/cli
+
+      - name: (Optional) Amplify pull (if using Amplify backend)
+        run: |
+          amplify pull --appId d2ekis5kbflzhi --envName prod --yes
+        # if not using amplify backend, skip the pull
+
       - name: Install dependencies
         run: npm install
+
       - name: Build Angular app
-        run: npm run build
+        run: npm run build -- --prod
+        env:
+          # optional: pass environment variables if needed for build-time substitution
+          API_BASE_URL_SEAT: ${{ secrets.API_BASE_URL_SEAT }}   # or store in repo secret
+          API_BASE_URL_REVIEW: ${{ secrets.API_BASE_URL_REVIEW }}
+
       - name: Deploy to Amplify
         run: amplify publish --yes
 
