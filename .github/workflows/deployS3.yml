@@ -25,8 +25,9 @@ jobs:
         run: npm run build --configuration production
 
       - name: Deploy to S3
-        uses: aws-actions/amazon-s3-deploy@v2
+        uses: aws-actions/amazon-s3-deploy@v1
         with:
-          bucket: bookmyseatak
-          region: us-east-1
-          folder: dist/frontend-service
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: "public"
