@@ -1,8 +1,9 @@
 name: Deploy Angular to S3
 
 on:
-  push:
-    branches: [ main ]
+ # push:
+ workflow_dispatch:
+   # branches: [ main ]
 
 jobs:
   deploy:
