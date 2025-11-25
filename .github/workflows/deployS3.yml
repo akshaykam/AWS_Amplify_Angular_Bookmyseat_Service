@@ -36,4 +36,4 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync dist/frontend-service s3://${{ secrets.AWS_S3_BUCKET }} --delete
+          aws s3 sync dist/frontend-service/browser/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
