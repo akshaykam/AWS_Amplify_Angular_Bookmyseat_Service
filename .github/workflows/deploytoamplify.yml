@@ -38,7 +38,7 @@ jobs:
 
       # Build Angular app
       - name: Build Angular app
-        run: npx ng build frontend-service --configuration dev
+        run: npx ng build frontend-service --configuration production
         env:
           API_BASE_URL_SEAT: ${{ secrets.API_BASE_URL_SEAT }}   # pass API URL via secrets/env variables
           API_BASE_URL_REVIEW: ${{ secrets.API_BASE_URL_REVIEW }}
