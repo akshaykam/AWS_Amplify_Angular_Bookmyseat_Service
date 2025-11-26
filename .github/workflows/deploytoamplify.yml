@@ -2,9 +2,9 @@ name: Deploy to AWS Amplify
 
 on:
   workflow_dispatch:
-  #push:
-   # branches:
-    #  - main
+  # push:
+  #   branches:
+  #     - main
 
 permissions:
   id-token: write
@@ -26,23 +26,23 @@ jobs:
       - name: Install Amplify CLI
         run: npm install -g @aws-amplify/cli
 
-      - name: (Optional) Amplify pull (if using Amplify backend)
+      # Initialize Amplify Project (for the first-time setup)
+      - name: Initialize Amplify Project
         run: |
-          amplify pull --appId d2ekis5kbflzhi --envName production --yes
-        # if not using amplify backend, skip the pull
-
+          amplify init --yes
+        # --yes auto-confirms prompts and initializes the app with default settings.
+      
+      # Install dependencies (Angular app)
       - name: Install dependencies
         run: npm install
 
+      # Build Angular app
       - name: Build Angular app
         run: npx ng build frontend-service --configuration production
         env:
-          # optional: pass environment variables if needed for build-time substitution
-          API_BASE_URL_SEAT: ${{ secrets.API_BASE_URL_SEAT }}   # or store in repo secret
+          API_BASE_URL_SEAT: ${{ secrets.API_BASE_URL_SEAT }}   # pass API URL via secrets/env variables
           API_BASE_URL_REVIEW: ${{ secrets.API_BASE_URL_REVIEW }}
 
+      # Deploy the Angular app to Amplify
       - name: Deploy to Amplify
         run: amplify publish --yes
-
-# Replace <ACCOUNT_ID>, <ROLE_NAME>, and <REGION> with your AWS details.
-# Make sure your IAM role has permissions for Amplify, S3, and CloudFront.
