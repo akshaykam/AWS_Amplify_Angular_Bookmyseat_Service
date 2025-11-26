@@ -26,11 +26,33 @@ jobs:
       - name: Install Amplify CLI
         run: npm install -g @aws-amplify/cli
 
-      # Initialize Amplify Project (for the first-time setup)
+ # Check if the Amplify app 'bookmyseat' exists
+      - name: Check if Amplify app exists
+        id: amplify_check
+        run: |
+          # Get the list of Amplify apps and check if 'bookmyseat' is present
+          amplify_apps=$(aws amplify list-apps --query "apps[?name=='bookmyseat'].name" --output text)
+          
+          if [[ "$amplify_apps" == "bookmyseat" ]]; then
+            echo "Amplify app 'bookmyseat' exists. Skipping amplify init."
+            echo "EXISTING_APP=true" >> $GITHUB_ENV
+          else
+            echo "Amplify app 'bookmyseat' does not exist. Proceeding with amplify init."
+            echo "EXISTING_APP=false" >> $GITHUB_ENV
+          fi
+
+      # Initialize Amplify project if app doesn't exist
       - name: Initialize Amplify Project
+        if: env.EXISTING_APP == 'false'
         run: |
           amplify init --yes
-        # --yes auto-confirms prompts and initializes the app with default settings.
+
+      # Fetch the existing Amplify project details if app exists
+      - name: Pull Amplify project details
+        if: env.EXISTING_APP == 'true'
+        run: |
+          amplify pull --appId YOUR_APP_ID --envName prod --yes
+
       
       # Install dependencies (Angular app)
       - name: Install dependencies
