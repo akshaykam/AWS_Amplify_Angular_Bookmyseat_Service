@@ -1,4 +1,5 @@
 name: Deploy Angular to S3
+# Create New Bucket and allowed Static hosting of application and add bucket name in Secrets before running workflow
 # Goto bucket properties -> Bucket website endpoint to access application
 on:
  # push:
