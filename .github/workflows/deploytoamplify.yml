@@ -28,7 +28,7 @@ jobs:
 
       - name: (Optional) Amplify pull (if using Amplify backend)
         run: |
-          amplify pull --appId d2ekis5kbflzhi --envName prod --yes
+          amplify pull --appId d2ekis5kbflzhi --envName production --yes
         # if not using amplify backend, skip the pull
 
       - name: Install dependencies
