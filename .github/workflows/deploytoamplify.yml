@@ -35,7 +35,7 @@ jobs:
         run: npm install
 
       - name: Build Angular app
-        run: npm run build -- --prod
+        run: npx ng build frontend-service --configuration production
         env:
           # optional: pass environment variables if needed for build-time substitution
           API_BASE_URL_SEAT: ${{ secrets.API_BASE_URL_SEAT }}   # or store in repo secret
