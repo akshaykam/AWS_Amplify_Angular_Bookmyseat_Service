@@ -8,7 +8,7 @@ frontend:
       commands:
         - npm run build -- --prod
   artifacts:
-    baseDirectory: dist/frontend-service # e.g. dist/my-app
+    baseDirectory: dist/frontend-service/browser # e.g. dist/my-app
     files:
       - '**/*'
   cache:
