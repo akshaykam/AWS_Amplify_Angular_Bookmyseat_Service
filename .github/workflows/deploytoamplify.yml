@@ -12,9 +12,8 @@ permissions:
 
 env:
   AWS_REGION: us-east-1
-  AMPLIFY_APP_NAME: bookmyseat           # adjust if your Amplify app name differs
-  AMPLIFY_APP_ID: d3rx9dwmgaq4hk         # set your real Amplify appId (from Amplify console)
-  AMPLIFY_ENV: prod                      # set your Amplify env name
+  AMPLIFY_APP_ID: d20avnkha3gw9q
+  AMPLIFY_BRANCH: main   # must match branch connected in Amplify Console
 
 jobs:
   deploy:
@@ -30,43 +29,9 @@ jobs:
           role-to-assume: arn:aws:iam::543816070942:role/AWSAmplify_Angular_Role_AK
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install Amplify CLI
-        run: npm install -g @aws-amplify/cli
-
-      - name: Check if Amplify app exists
-        id: amplify_check
+      - name: Trigger Amplify Deployment
         run: |
-          amplify_apps=$(aws amplify list-apps --query "apps[?appId=='${{ env.AMPLIFY_APP_ID }}'].appId" --output text)
-          if [[ "$amplify_apps" == "${{ env.AMPLIFY_APP_ID }}" ]]; then
-            echo "EXISTING_APP=true" >> $GITHUB_ENV
-          else
-            echo "EXISTING_APP=false" >> $GITHUB_ENV
-          fi
-
-      - name: Initialize Amplify Project (if missing)
-        if: env.EXISTING_APP == 'false'
-        run: |
-          amplify init \
-            --appId ${{ env.AMPLIFY_APP_ID }} \
-            --envName ${{ env.AMPLIFY_ENV }} \
-            --yes
-
-      - name: Pull Amplify project (if exists)
-        if: env.EXISTING_APP == 'true'
-        run: |
-          amplify pull \
-            --appId ${{ env.AMPLIFY_APP_ID }} \
-            --envName ${{ env.AMPLIFY_ENV }} \
-            --yes
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Angular app
-        run: npx ng build frontend-service --configuration production
-        env:
-          API_BASE_URL_SEAT: ${{ secrets.API_BASE_URL_SEAT }}
-          API_BASE_URL_REVIEW: ${{ secrets.API_BASE_URL_REVIEW }}
-
-      - name: Deploy to Amplify
-        run: amplify publish --yes
+          aws amplify start-job \
+            --app-id ${{ env.AMPLIFY_APP_ID }} \
+            --branch-name ${{ env.AMPLIFY_BRANCH }} \
+            --job-type RELEASE
