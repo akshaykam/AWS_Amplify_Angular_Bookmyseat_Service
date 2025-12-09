@@ -6,7 +6,7 @@ frontend:
         - npm ci
     build:
       commands:
-        - npx ng build frontend-service --configuration prod
+        - npx ng build frontend-service --configuration production
   artifacts:
     baseDirectory: dist/frontend-service/browser # e.g. dist/my-app
     files:
