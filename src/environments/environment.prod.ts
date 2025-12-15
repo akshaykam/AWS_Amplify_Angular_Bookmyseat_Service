@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  movieServiceUrl: '/api/movies',  // Proxied through Nginx
-  reviewServiceUrl: '/api/reviews', // Proxied through Nginx
+  movieServiceUrl: 'https://bookmyseat.dockeroncloud.com/api/v1',  // Full URL - no trailing slash
+  reviewServiceUrl: 'https://bookmyseat.dockeroncloud.com/api/v1', // Full URL - no trailing slash
   enableTracing: true
 };
